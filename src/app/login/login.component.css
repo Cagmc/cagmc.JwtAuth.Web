@@ -11,7 +11,7 @@
   width: 100%;
   text-align: center;
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .login-form {
@@ -26,6 +26,12 @@
 
 .form-field {
   display: block;
+  margin-bottom: 20px;
+}
+
+.form-field-error {
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 
 /*# sourceMappingURL=login.component.css.map */
