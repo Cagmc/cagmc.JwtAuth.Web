@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {environment} from '../../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class AccountService {
-  // TODO: remove fake api url, or move to environment file
-  baseUrl = 'http://localhost:3000';
+  private readonly baseUrl = environment.apiUrl;
 
   constructor(private readonly http: HttpClient) {
   }
