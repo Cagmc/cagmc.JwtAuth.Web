@@ -1,0 +1,14 @@
+<div>login works!</div>
+
+<div class="login-form">
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput type="text" [formControl]="emailInput" placeholder="Email">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" [formControl]="passwordInput" placeholder="Password">
+  </mat-form-field>
+
+  <button mat-flat-button (click)="onLogin()">Login</button>
+</div>
