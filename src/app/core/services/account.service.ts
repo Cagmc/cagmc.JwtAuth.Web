@@ -1,0 +1,22 @@
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+
+@Injectable({providedIn: 'root'})
+export class AccountService {
+  // TODO: remove fake api url, or move to environment file
+  baseUrl = 'http://localhost:3000';
+
+  constructor(private readonly http: HttpClient) {
+  }
+
+  public login(email: string, password: string): boolean {
+    const loginModel = {
+      email: email,
+      password: password
+    }
+
+    this.http.post(`${this.baseUrl}/api/accounts/login`, loginModel).subscribe();
+
+    return true;
+  }
+}

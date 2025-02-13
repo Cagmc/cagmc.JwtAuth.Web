@@ -1,18 +1,30 @@
 <div class="login-container">
-  <div class="login-form">
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
 
     <div class="login-title">Log in</div>
 
     <mat-form-field class="form-field">
       <mat-label>Email</mat-label>
-      <input matInput type="text" [formControl]="emailInput" placeholder="Email">
+      <input matInput type="text" formControlName="email" placeholder="Email">
+      @if (loginForm.get('email')?.errors?.['required'])
+      {
+        <mat-error>Email is required</mat-error>
+      }
+      @if (loginForm.get('email')?.errors?.['email'])
+      {
+        <mat-error>Email is invalid</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field class="form-field">
       <mat-label>Password</mat-label>
-      <input matInput type="password" [formControl]="passwordInput" placeholder="Password">
+      <input matInput type="password" formControlName="password" placeholder="Password">
+      @if (loginForm.get('password')?.errors?.['required'])
+      {
+        <mat-error>Password is required</mat-error>
+      }
     </mat-form-field>
 
-    <button class="login-button" mat-flat-button (click)="onLogin()">Login</button>
-  </div>
+    <button class="login-button" mat-flat-button type="submit">Login</button>
+  </form>
 </div>
