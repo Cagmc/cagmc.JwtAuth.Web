@@ -10,12 +10,16 @@ export class AccountService {
 
   constructor(private readonly http: HttpClient) {}
 
-  public login(email: string, password: string): Observable<object> {
+  public login(
+    email: string,
+    password: string,
+    authenticationMode: AuthenticationMode,
+  ): Observable<object> {
     const loginModel = {
       username: email,
       password: password,
       isPersistent: true,
-      authenticationMode: AuthenticationMode.Cookie,
+      authenticationMode: authenticationMode,
     };
 
     return timer(2000).pipe(

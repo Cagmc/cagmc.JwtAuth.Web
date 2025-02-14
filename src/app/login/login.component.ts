@@ -12,6 +12,8 @@ import { MatInput } from '@angular/material/input';
 import { AccountService } from '../core/services/account.service';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
+import { AuthenticationMode } from '../core/enums/authentication-mode.enum';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +24,8 @@ import { finalize } from 'rxjs';
     MatLabel,
     MatInput,
     MatError,
+    MatSelect,
+    MatOption,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -30,6 +34,7 @@ export class LoginComponent {
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
+    authMode: new FormControl(AuthenticationMode.Jwt),
   });
 
   isLoading = false;
@@ -42,11 +47,11 @@ export class LoginComponent {
 
   onLogin() {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+      const { email, password, authMode } = this.loginForm.value;
       this.isLoading = true;
 
       this.service
-        .login(email!, password!)
+        .login(email!, password!, authMode!)
         .pipe(
           finalize(() => {
             this.isLoading = false;

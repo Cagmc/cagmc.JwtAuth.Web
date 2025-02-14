@@ -22,6 +22,14 @@
       }
     </mat-form-field>
 
+    <mat-form-field class="form-field">
+      <mat-label>Mode</mat-label>
+      <mat-select formControlName="authMode">
+        <mat-option [value]="0">JWT</mat-option>
+        <mat-option [value]="1">Cookie</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <button [disabled]="!loginForm.valid || isLoading" class="login-button" mat-flat-button
             type="submit">{{ isLoading ? 'Logging in...' : 'Login' }}
     </button>
