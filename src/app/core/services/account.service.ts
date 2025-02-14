@@ -11,8 +11,10 @@ export class AccountService {
 
   public login(email: string, password: string): Observable<object> {
     const loginModel = {
-      email: email,
+      username: email,
       password: password,
+      isPersistent: true,
+      authenticationMode: 1,
     };
 
     return timer(2000).pipe(
