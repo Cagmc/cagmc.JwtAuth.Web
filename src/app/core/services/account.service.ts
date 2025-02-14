@@ -35,15 +35,24 @@ export class AccountService {
         }),
       );
   }
+
+  public me(): Observable<object> {
+    return this.http.get(`${this.baseUrl}/api/accounts/me`);
+  }
 }
 
-interface LoginModel {
+export interface LoginModel {
   username: string;
   password: string;
   isPersistent: boolean;
   authenticationMode: AuthenticationMode;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   token: string;
+}
+
+export interface MeViewModel {
+  username: string;
+  role: string;
 }
