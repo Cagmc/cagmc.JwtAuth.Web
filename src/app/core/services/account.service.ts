@@ -1,14 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AuthenticationMode } from '../enums/authentication-mode.enum';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
   private readonly baseUrl = environment.apiUrl;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly authService: AuthService,
+  ) {}
 
   public login(
     email: string,
@@ -20,8 +24,26 @@ export class AccountService {
       password: password,
       isPersistent: true,
       authenticationMode: authenticationMode,
-    };
+    } as LoginModel;
 
-    return this.http.post(`${this.baseUrl}/api/accounts/login`, loginModel);
+    return this.http
+      .post(`${this.baseUrl}/api/accounts/login`, loginModel)
+      .pipe(
+        tap((response) => {
+          const loginResponse = response as LoginResponse;
+          this.authService.login(loginResponse.token);
+        }),
+      );
   }
+}
+
+interface LoginModel {
+  username: string;
+  password: string;
+  isPersistent: boolean;
+  authenticationMode: AuthenticationMode;
+}
+
+interface LoginResponse {
+  token: string;
 }
