@@ -15,15 +15,37 @@ export class MagicalObjectService {
     discoveredTo: Date | null,
     elementalFilterSet: ElementalType[] | null,
   ) {
+    let queryFilter: string | null = null;
+
+    if (nameFilter !== null && nameFilter.length > 0) {
+      queryFilter = `nameFilter=${nameFilter}`;
+    }
+
+    if (discoveredFrom !== null) {
+      queryFilter =
+        queryFilter === null
+          ? `discoveredFrom=${discoveredFrom}`
+          : `${queryFilter}&discoveredFrom=${discoveredFrom}`;
+    }
+
+    if (discoveredTo !== null) {
+      queryFilter =
+        queryFilter === null
+          ? `discoveredTo=${discoveredTo}`
+          : `${queryFilter}&discoveredTo=${discoveredTo}`;
+    }
+
     let elementalQueryFilter: string | null = null;
 
     if (elementalFilterSet !== null && elementalFilterSet.length > 0) {
       elementalQueryFilter = elementalFilterSet.join('&elementalFilterSet=');
+      queryFilter =
+        queryFilter === null
+          ? `elementalFilterSet=${elementalQueryFilter}`
+          : `${queryFilter}&elementalFilterSet=${elementalQueryFilter}`;
     }
 
-    return this.http.get(
-      `${this.baseUrl}/api/magical-objects?nameFilter=${nameFilter}&discoveredFrom=${discoveredFrom}&discoveredTo=${discoveredTo}&elementalFilterSet=${elementalQueryFilter}`,
-    );
+    return this.http.get(`${this.baseUrl}/api/magical-objects?${queryFilter}`);
   }
 
   public create(request: CreateMagicalObjectRequest) {
@@ -32,7 +54,7 @@ export class MagicalObjectService {
 }
 
 export interface MagicalObjectListResponse {
-  items: MagicalObjectItemViewModel[];
+  data: MagicalObjectItemViewModel[];
   total: number;
 }
 

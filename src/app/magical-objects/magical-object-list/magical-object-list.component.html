@@ -1,1 +1,29 @@
-<p>magical-object-list works!</p>
+<div>
+  <div>Magical objects</div>
+  @if (listResponse) {
+    <table mat-table [dataSource]="listResponse.data">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Id</th>
+        <td mat-cell *matCellDef="let item"> {{ item.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name</th>
+        <td mat-cell *matCellDef="let item"> {{ item.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="elemental">
+        <th mat-header-cell *matHeaderCellDef> Elemental</th>
+        <td mat-cell *matCellDef="let item"> {{ item.elemental }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="discovered">
+        <th mat-header-cell *matHeaderCellDef> Discovered</th>
+        <td mat-cell *matCellDef="let item"> {{ item.discovered | date: 'y' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  }
+</div>

@@ -9,7 +9,11 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    if (localStorage === undefined) {
+      return false;
+    }
+
+    return localStorage.getItem(this.tokenKey) !== null;
   }
 
   getToken(): string {
