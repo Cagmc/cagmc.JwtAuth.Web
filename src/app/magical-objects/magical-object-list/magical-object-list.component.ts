@@ -16,7 +16,7 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
-import { MatAnchor } from '@angular/material/button';
+import { MatAnchor, MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -35,13 +35,20 @@ import { RouterLink } from '@angular/router';
     DatePipe,
     MatAnchor,
     RouterLink,
+    MatButton,
   ],
   templateUrl: './magical-object-list.component.html',
   styleUrl: './magical-object-list.component.scss',
 })
 export class MagicalObjectListComponent implements OnInit {
   listResponse: MagicalObjectListResponse | undefined;
-  displayedColumns: string[] = ['id', 'name', 'elemental', 'discovered'];
+  displayedColumns: string[] = [
+    'id',
+    'name',
+    'elemental',
+    'discovered',
+    'actions',
+  ];
 
   constructor(private readonly service: MagicalObjectService) {}
 
@@ -52,6 +59,18 @@ export class MagicalObjectListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching magical object list:', error);
+      },
+    });
+  }
+
+  onDelete(id: number) {
+    this.service.delete(id).subscribe({
+      next: (response) => {
+        console.log('Delete magical object successful', response);
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.log('Delete magical object failed', error);
       },
     });
   }

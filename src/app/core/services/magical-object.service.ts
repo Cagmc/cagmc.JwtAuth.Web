@@ -51,6 +51,10 @@ export class MagicalObjectService {
   public create(request: CreateMagicalObjectRequest) {
     return this.http.post(`${this.baseUrl}/api/magical-objects`, request);
   }
+
+  public delete(id: number) {
+    return this.http.delete(`${this.baseUrl}/api/magical-objects/${id}`);
+  }
 }
 
 export interface MagicalObjectListResponse {
