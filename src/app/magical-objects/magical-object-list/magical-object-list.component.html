@@ -1,5 +1,8 @@
 <div>
   <div>Magical objects</div>
+
+  <a color="primary" mat-raised-button routerLink="/magical-objects/create">Create</a>
+
   @if (listResponse) {
     <table mat-table [dataSource]="listResponse.data">
       <ng-container matColumnDef="id">

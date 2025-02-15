@@ -16,6 +16,8 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
+import { MatAnchor } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-magical-object-list',
@@ -31,6 +33,8 @@ import { DatePipe } from '@angular/common';
     MatRowDef,
     MatHeaderRowDef,
     DatePipe,
+    MatAnchor,
+    RouterLink,
   ],
   templateUrl: './magical-object-list.component.html',
   styleUrl: './magical-object-list.component.scss',
