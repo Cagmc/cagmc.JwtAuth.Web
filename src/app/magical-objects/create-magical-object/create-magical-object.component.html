@@ -1,8 +1,44 @@
 <div class="create-container">
   <form (ngSubmit)="onSubmit()" [formGroup]="createForm" class="create-form">
+
+    <mat-form-field class="form-field">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="Name" type="text">
+      @if (createForm.get('name')?.errors?.['required']) {
+        <mat-error class="form-field-error">Name is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Description</mat-label>
+      <input formControlName="description" matInput placeholder="Description" type="text">
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Elemental</mat-label>
+      <mat-select formControlName="elemental">
+        @for (type of elementalTypes; track type) {
+          <mat-option [value]="type">{{type}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+      <mat-label>Discovered</mat-label>
+      <input formControlName="dateDiscovered" matInput [matDatepicker]="datepicker">
+      <mat-hint>YYYY-MM-DD</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+      <mat-datepicker #datepicker>
+        <mat-datepicker-actions>
+          <button mat-button matDatepickerCancel>Cancel</button>
+          <button mat-raised-button matDatepickerApply>Apply</button>
+        </mat-datepicker-actions>
+      </mat-datepicker>
+    </mat-form-field>
+
     <div>
-      <button mat-raised-button type="submit">Create</button>
-      <button (click)="onCancel()" mat-raised-button type="button">Cancel</button>
+      <button class="submit-button" mat-flat-button type="submit">Create</button>
+      <button class="cancel-button" (click)="onCancel()" mat-flat-button type="button">Cancel</button>
     </div>
   </form>
 </div>
