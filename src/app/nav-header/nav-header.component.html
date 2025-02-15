@@ -1,3 +1,11 @@
 <div class="nav-header">
   JWT - Cookie Auth Example
 </div>
+
+@if (isAuthenticated) {
+  <a color="primary" mat-raised-button routerLink="/magical-objects">Magical objects</a>
+  <a color="primary" mat-raised-button routerLink="/profile">Profile</a>
+  <a color="primary" mat-raised-button (click)="onLogout()">Logout</a>
+} @else {
+  <a color="primary" mat-raised-button routerLink="/login">Login</a>
+}

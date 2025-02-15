@@ -1,1 +1,8 @@
-<p>create-magical-object works!</p>
+<div class="create-container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="createForm" class="create-form">
+    <div>
+      <button mat-raised-button type="submit">Create</button>
+      <button (click)="onCancel()" mat-raised-button type="button">Cancel</button>
+    </div>
+  </form>
+</div>

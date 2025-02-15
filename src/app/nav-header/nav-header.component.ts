@@ -1,11 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../core/auth/auth.service';
+import { MatAnchor } from '@angular/material/button';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-nav-header',
-  imports: [],
+  imports: [MatAnchor, RouterLink],
   templateUrl: './nav-header.component.html',
-  styleUrl: './nav-header.component.scss'
+  styleUrl: './nav-header.component.scss',
 })
-export class NavHeaderComponent {
+export class NavHeaderComponent implements OnInit {
+  isAuthenticated = false;
 
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {}
+
+  ngOnInit(): void {
+    this.isAuthenticated = this.authService.isLoggedIn();
+  }
+
+  onLogout() {
+    this.authService.logout();
+    this.isAuthenticated = false;
+    this.router.navigate(['/']);
+    window.location.reload();
+  }
 }

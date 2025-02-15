@@ -3,12 +3,19 @@ import {
   CreateMagicalObjectRequest,
   MagicalObjectService,
 } from '../../core/services/magical-object.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ElementalType } from '../../core/enums/elemental-type.enum';
+import { MatButton } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-magical-object',
-  imports: [],
+  imports: [MatButton, ReactiveFormsModule],
   templateUrl: './create-magical-object.component.html',
   styleUrl: './create-magical-object.component.scss',
 })
@@ -20,7 +27,10 @@ export class CreateMagicalObjectComponent {
     dateDiscovered: new FormControl(new Date(), [Validators.required]),
   });
 
-  constructor(private readonly service: MagicalObjectService) {}
+  constructor(
+    private readonly service: MagicalObjectService,
+    private readonly router: Router,
+  ) {}
 
   onSubmit() {
     if (!this.createForm.valid) {
@@ -37,5 +47,10 @@ export class CreateMagicalObjectComponent {
     } as CreateMagicalObjectRequest;
 
     this.service.create(request);
+  }
+
+  onCancel() {
+    this.createForm.reset();
+    this.router.navigate(['/magical-objects']);
   }
 }
