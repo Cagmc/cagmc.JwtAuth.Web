@@ -37,6 +37,7 @@ export class LoginComponent {
     authMode: new FormControl(AuthenticationMode.Jwt),
   });
 
+  authModes = Object.values(AuthenticationMode);
   isLoading = false;
 
   constructor(
