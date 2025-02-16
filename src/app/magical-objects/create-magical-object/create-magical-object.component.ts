@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import {
   CreateMagicalObjectRequest,
+  CreateMagicalPropertyRequest,
   MagicalObjectService,
 } from '../../core/services/magical-object.service';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -16,8 +18,8 @@ import { Router } from '@angular/router';
 import {
   MatError,
   MatFormField,
-  MatLabel,
   MatHint,
+  MatLabel,
 } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import {
@@ -36,6 +38,18 @@ import {
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
 import { MY_FORMATS } from '../../core/formats/date.formats';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
 
 @Component({
   selector: 'app-create-magical-object',
@@ -64,6 +78,17 @@ import { MY_FORMATS } from '../../core/formats/date.formats';
     MatDatepickerActions,
     MatDatepickerCancel,
     MatDatepickerApply,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+    FormsModule,
   ],
   templateUrl: './create-magical-object.component.html',
   styleUrl: './create-magical-object.component.scss',
@@ -75,7 +100,15 @@ export class CreateMagicalObjectComponent {
     elemental: new FormControl(ElementalType.None, [Validators.required]),
     dateDiscovered: new FormControl(new Date(), [Validators.required]),
   });
+  addPropertyForm = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    value: new FormControl('', [Validators.required]),
+  });
+  displayedPropertyColumns: string[] = ['name', 'value', 'actions'];
+  addedProperties: CreateMagicalPropertyRequest[] = [];
   elementalTypes = Object.values(ElementalType);
+  protected readonly ElementalType = ElementalType;
+  protected readonly Object = Object;
 
   constructor(
     private readonly service: MagicalObjectService,
@@ -93,7 +126,7 @@ export class CreateMagicalObjectComponent {
       description: description,
       elemental: elemental,
       discovered: dateDiscovered,
-      properties: [],
+      properties: this.addedProperties,
     } as CreateMagicalObjectRequest;
 
     this.service.create(request).subscribe({
@@ -107,11 +140,30 @@ export class CreateMagicalObjectComponent {
     });
   }
 
+  onAddProperty() {
+    if (!this.addPropertyForm.valid) {
+      return;
+    }
+    const { name, value } = this.addPropertyForm.value;
+    const request = {
+      name: name,
+      value: value,
+    } as CreateMagicalPropertyRequest;
+    this.addedProperties.push(request);
+    this.addPropertyForm.reset();
+
+    // Refresh the UI by triggering change detection to ensure any updates are reflected
+    this.addedProperties = [...this.addedProperties];
+  }
+
+  onRemoveProperty(name: string) {
+    this.addedProperties = this.addedProperties.filter(
+      (property) => property.name !== name,
+    );
+  }
+
   onCancel() {
     this.createForm.reset();
     this.router.navigate(['/magical-objects']);
   }
-
-  protected readonly ElementalType = ElementalType;
-  protected readonly Object = Object;
 }
