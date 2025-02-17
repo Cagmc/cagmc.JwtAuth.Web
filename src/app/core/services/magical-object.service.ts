@@ -48,8 +48,16 @@ export class MagicalObjectService {
     return this.http.get(`${this.baseUrl}/api/magical-objects?${queryFilter}`);
   }
 
+  public getById(id: number) {
+    return this.http.get(`${this.baseUrl}/api/magical-objects/${id}`);
+  }
+
   public create(request: CreateMagicalObjectRequest) {
     return this.http.post(`${this.baseUrl}/api/magical-objects`, request);
+  }
+
+  public update(id: number, request: UpdateMagicalObjectRequest) {
+    return this.http.put(`${this.baseUrl}/api/magical-objects/${id}`, request);
   }
 
   public delete(id: number) {
@@ -69,6 +77,14 @@ export interface MagicalObjectItemViewModel {
   discovered: Date;
 }
 
+export interface MagicalObjectViewModel {
+  id: number;
+  name: string;
+  description: string | null;
+  elemental: ElementalType;
+  discovered: Date;
+}
+
 export interface CreateMagicalObjectRequest {
   name: string;
   description: string | null;
@@ -81,4 +97,11 @@ export interface CreateMagicalObjectRequest {
 export interface CreateMagicalPropertyRequest {
   name: string;
   value: string;
+}
+
+export interface UpdateMagicalObjectRequest {
+  name: string;
+  description: string | null;
+  elemental: ElementalType;
+  discovered: Date;
 }
