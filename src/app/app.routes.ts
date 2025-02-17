@@ -5,6 +5,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { AuthGuard } from './core/auth/auth.guard';
 import { MagicalObjectListComponent } from './magical-objects/magical-object-list/magical-object-list.component';
 import { CreateMagicalObjectComponent } from './magical-objects/create-magical-object/create-magical-object.component';
+import { EditMagicalObjectComponent } from './magical-objects/edit-magical-object/edit-magical-object.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,6 +20,11 @@ export const routes: Routes = [
   {
     path: 'magical-objects/create',
     component: CreateMagicalObjectComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'magical-objects/:id/edit',
+    component: EditMagicalObjectComponent,
     canActivate: [AuthGuard],
   },
 ];

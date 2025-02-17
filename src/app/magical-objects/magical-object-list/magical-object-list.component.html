@@ -29,6 +29,7 @@
         <th mat-header-cell *matHeaderCellDef> Actions</th>
         <td mat-cell *matCellDef="let item">
           <a mat-button color="primary" routerLink="/magical-objects/{{item.id}}">View</a>
+          <a mat-button color="primary" routerLink="/magical-objects/{{item.id}}/edit">Edit</a>
           <button mat-button color="primary" (click)="onDelete(item.id)">Delete</button>
         </td>
       </ng-container>
