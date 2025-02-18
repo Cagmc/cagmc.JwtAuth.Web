@@ -83,6 +83,13 @@ export interface MagicalObjectViewModel {
   description: string | null;
   elemental: ElementalType;
   discovered: Date;
+
+  properties: MagicalPropertyViewModel[];
+}
+
+export interface MagicalPropertyViewModel {
+  name: string;
+  value: string;
 }
 
 export interface CreateMagicalObjectRequest {
@@ -104,4 +111,11 @@ export interface UpdateMagicalObjectRequest {
   description: string | null;
   elemental: ElementalType;
   discovered: Date;
+
+  properties: UpdateMagicalPropertyRequest[];
+}
+
+export interface UpdateMagicalPropertyRequest {
+  name: string;
+  value: string;
 }

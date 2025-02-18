@@ -79,7 +79,7 @@
         <mat-form-field class="form-field">
           <mat-label>Name</mat-label>
           <input formControlName="name" matInput placeholder="Name" type="text">
-          @if (createForm.get('name')?.errors?.['required']) {
+          @if (addPropertyForm.get('name')?.errors?.['required']) {
             <mat-error class="form-field-error">Name is required</mat-error>
           }
         </mat-form-field>
@@ -87,7 +87,7 @@
         <mat-form-field class="form-field">
           <mat-label>Value</mat-label>
           <input formControlName="value" matInput placeholder="Value" type="text">
-          @if (createForm.get('value')?.errors?.['required']) {
+          @if (addPropertyForm.get('value')?.errors?.['required']) {
             <mat-error class="form-field-error">Value is required</mat-error>
           }
         </mat-form-field>

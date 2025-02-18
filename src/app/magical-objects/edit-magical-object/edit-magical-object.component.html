@@ -1,1 +1,99 @@
-<p>update-magical-object works!</p>
+<div class="edit-container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="editForm" class="edit-form">
+    <div class="form-basic-data">
+
+      <h3>Object basic data</h3>
+
+      <hr style="margin-bottom: 20px;"/>
+
+      <mat-form-field class="form-field">
+        <mat-label>Name</mat-label>
+        <input formControlName="name" matInput placeholder="Name" type="text">
+        @if (editForm.get('name')?.errors?.['required']) {
+          <mat-error class="form-field-error">Name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="form-field">
+        <mat-label>Description</mat-label>
+        <input formControlName="description" matInput placeholder="Description" type="text">
+      </mat-form-field>
+
+      <mat-form-field class="form-field">
+        <mat-label>Elemental</mat-label>
+        <mat-select formControlName="elemental">
+          @for (type of elementalTypes; track type) {
+            <mat-option [value]="type">{{ type }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form-field">
+        <mat-label>Discovered</mat-label>
+        <input [matDatepicker]="datepicker" formControlName="discovered" matInput>
+        <mat-hint>YYYY-MM-DD</mat-hint>
+        <mat-datepicker-toggle [for]="datepicker" matIconSuffix></mat-datepicker-toggle>
+        <mat-datepicker #datepicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-raised-button matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button class="submit-button" mat-flat-button type="submit">Create</button>
+        <button (click)="onCancel()" class="cancel-button" mat-flat-button type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div class="form-properties">
+
+      <h3>Additional properties</h3>
+
+      <hr/>
+
+      <table [dataSource]="addedProperties" mat-table>
+        <ng-container matColumnDef="name">
+          <th *matHeaderCellDef mat-header-cell> Name</th>
+          <td *matCellDef="let item" mat-cell> {{ item.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <th *matHeaderCellDef mat-header-cell> Value</th>
+          <td *matCellDef="let item" mat-cell> {{ item.value }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell> Actions</th>
+          <td *matCellDef="let item" mat-cell>
+            <button (click)="onRemoveProperty(item.name)" color="primary" mat-button>Remove</button>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedPropertyColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedPropertyColumns;" mat-row></tr>
+      </table>
+
+      <form (ngSubmit)="onAddProperty()" [formGroup]="addPropertyForm" class="add-property-form">
+        <mat-form-field class="form-field">
+          <mat-label>Name</mat-label>
+          <input formControlName="name" matInput placeholder="Name" type="text">
+          @if (addPropertyForm.get('name')?.errors?.['required']) {
+            <mat-error class="form-field-error">Name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>Value</mat-label>
+          <input formControlName="value" matInput placeholder="Value" type="text">
+          @if (addPropertyForm.get('value')?.errors?.['required']) {
+            <mat-error class="form-field-error">Value is required</mat-error>
+          }
+        </mat-form-field>
+
+        <button class="submit-button" mat-flat-button type="submit">Add</button>
+      </form>
+    </div>
+  </form>
+</div>

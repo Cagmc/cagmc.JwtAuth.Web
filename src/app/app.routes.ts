@@ -19,7 +19,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'magical-objects/:id',
+    path: 'magical-objects/details/:id',
     component: MagicalObjectDetailsComponent,
     canActivate: [AuthGuard],
   },
@@ -29,7 +29,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'magical-objects/:id/edit',
+    path: 'magical-objects/edit/:id',
     component: EditMagicalObjectComponent,
     canActivate: [AuthGuard],
   },
