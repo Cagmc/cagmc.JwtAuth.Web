@@ -4,6 +4,7 @@ import {
   CreateMagicalPropertyRequest,
   MagicalObjectService,
   MagicalObjectViewModel,
+  UpdateMagicalObjectRequest,
   UpdateMagicalPropertyRequest,
 } from '../../core/services/magical-object.service';
 import {
@@ -139,7 +140,31 @@ export class EditMagicalObjectComponent implements OnInit {
     });
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if (!this.editForm.valid) {
+      return;
+    }
+    const { id, name, description, elemental, discovered } =
+      this.editForm.value;
+    const request = {
+      id: id,
+      name: name,
+      description: description,
+      elemental: elemental,
+      discovered: discovered,
+      properties: this.addedProperties,
+    } as UpdateMagicalObjectRequest;
+
+    this.service.update(id, request).subscribe({
+      next: (response) => {
+        console.log('Update magical object successful', response);
+        this.router.navigate(['/magical-objects']);
+      },
+      error: (error) => {
+        console.log('Update magical object failed', error);
+      },
+    });
+  }
 
   onAddProperty() {
     if (!this.addPropertyForm.valid) {
