@@ -1,0 +1,34 @@
+.edit-form {
+  display: block;
+  width: 400px;
+}
+
+.form-field {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.form-field-error {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.submit-button {
+  width: 150px;
+}
+
+.cancel-button {
+  width: 150px;
+  margin-left: 10px;
+}
+
+.form-properties {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+}
