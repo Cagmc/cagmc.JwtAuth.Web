@@ -144,10 +144,8 @@ export class EditMagicalObjectComponent implements OnInit {
     if (!this.editForm.valid) {
       return;
     }
-    const { id, name, description, elemental, discovered } =
-      this.editForm.value;
+    const { name, description, elemental, discovered } = this.editForm.value;
     const request = {
-      id: id,
       name: name,
       description: description,
       elemental: elemental,
@@ -155,7 +153,7 @@ export class EditMagicalObjectComponent implements OnInit {
       properties: this.addedProperties,
     } as UpdateMagicalObjectRequest;
 
-    this.service.update(id, request).subscribe({
+    this.service.update(this.magicalObjectId!, request).subscribe({
       next: (response) => {
         console.log('Update magical object successful', response);
         this.router.navigate(['/magical-objects']);

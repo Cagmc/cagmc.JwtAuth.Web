@@ -7,6 +7,11 @@
       <hr style="margin-bottom: 20px;"/>
 
       <mat-form-field class="form-field">
+        <mat-label>Id</mat-label>
+        <input formControlName="id" matInput placeholder="Id" type="text">
+      </mat-form-field>
+
+      <mat-form-field class="form-field">
         <mat-label>Name</mat-label>
         <input formControlName="name" matInput placeholder="Name" type="text">
         @if (editForm.get('name')?.errors?.['required']) {
@@ -42,7 +47,7 @@
       </mat-form-field>
 
       <div class="form-actions">
-        <button class="submit-button" mat-flat-button type="submit">Create</button>
+        <button class="submit-button" mat-flat-button type="submit">Update</button>
         <button (click)="onCancel()" class="cancel-button" mat-flat-button type="button">Cancel</button>
       </div>
     </div>
