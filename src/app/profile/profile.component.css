@@ -1,3 +1,20 @@
-
+.profile-container {
+  display: block;
+}
+.profile-container .title {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+.profile-container .profile-property {
+  display: flex;
+  margin-bottom: 10px;
+}
+.profile-container .profile-property .label {
+  width: 150px;
+}
+.profile-container .profile-property .value {
+  flex: 1;
+  font-weight: bold;
+}
 
 /*# sourceMappingURL=profile.component.css.map */

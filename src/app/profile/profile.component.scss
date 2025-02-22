@@ -1,0 +1,22 @@
+.profile-container {
+  display: block;
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+
+  .profile-property {
+    display: flex;
+    margin-bottom: 10px;
+
+    .label {
+      width: 150px;
+    }
+
+    .value {
+      flex: 1;
+      font-weight: bold;
+    }
+  }
+}

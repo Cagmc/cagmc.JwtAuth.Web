@@ -1,8 +1,16 @@
-<p>profile works!</p>
+<div class="profile-container">
 
-<div style="display: block">
-@if (meViewModel !== undefined) {
-  <div>{{meViewModel.username}}</div>
-  <div>{{meViewModel.role}}</div>
+  <div class="title">Profile</div>
+
+  @if (meViewModel !== undefined) {
+    <div class="profile-property">
+      <div class="label">Username</div>
+      <div class="value">{{ meViewModel.username }}</div>
+    </div>
+
+    <div class="profile-property">
+      <div class="label">Role</div>
+      <div class="value">{{ meViewModel.role }}</div>
+    </div>
 }
 </div>
