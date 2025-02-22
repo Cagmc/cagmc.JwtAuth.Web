@@ -5,6 +5,26 @@
 .filters {
   margin-top: 30px;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.form-field {
+  display: block;
+  margin-right: 10px;
+}
+
+.apply-filters-button {
+  width: 150px;
+  margin-right: 10px;
+}
+
+.reset-filters-button {
+  width: 150px;
+}
+
+.create-button {
+  width: 150px;
 }
 
 /*# sourceMappingURL=magical-object-list.component.css.map */

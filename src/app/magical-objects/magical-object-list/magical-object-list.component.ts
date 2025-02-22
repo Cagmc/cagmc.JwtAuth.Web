@@ -19,13 +19,42 @@ import { DatePipe } from '@angular/common';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounce } from 'lodash';
-import { MatInput } from '@angular/material/input';
+import {
+  MatFormField,
+  MatHint,
+  MatInput,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/input';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import {
+  MatDatepicker,
+  MatDatepickerActions,
+  MatDatepickerApply,
+  MatDatepickerCancel,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MY_FORMATS } from '../../core/formats/date.formats';
 
 @Component({
   selector: 'app-magical-object-list',
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
   imports: [
     MatTable,
     MatHeaderCell,
@@ -46,6 +75,17 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
     MatInput,
     MatSort,
     MatSortHeader,
+    MatFormField,
+    MatLabel,
+    MatDatepicker,
+    MatDatepickerActions,
+    MatDatepickerApply,
+    MatDatepickerCancel,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatHint,
+    MatSuffix,
+    ReactiveFormsModule,
   ],
   templateUrl: './magical-object-list.component.html',
   styleUrl: './magical-object-list.component.scss',
@@ -55,6 +95,10 @@ export class MagicalObjectListComponent implements OnInit {
   pageIndex: number = 0;
   pageSize: number = 10;
   sort: string | null = null;
+  discoveredFrom: Date | null = null;
+  discoveredTo: Date | null = null;
+  elemental: string | null = null;
+
   listResponse: MagicalObjectListResponse | undefined;
   displayedColumns: string[] = [
     'id',
@@ -65,10 +109,6 @@ export class MagicalObjectListComponent implements OnInit {
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  onSearch = debounce(() => {
-    this.pageIndex = 0;
-    this.getFromServer();
-  }, 300);
 
   constructor(private readonly service: MagicalObjectService) {}
 
@@ -76,8 +116,21 @@ export class MagicalObjectListComponent implements OnInit {
     this.getFromServer();
   }
 
+  onSearch = debounce(() => {
+    this.pageIndex = 0;
+    this.getFromServer();
+  }, 300);
+
+  onResetFilters() {
+    this.searchTerm = null;
+    this.discoveredFrom = null;
+    this.discoveredTo = null;
+    this.elemental = null;
+    this.pageIndex = 0;
+    this.getFromServer();
+  }
+
   onPageChange(event: PageEvent): void {
-    // Update the pagination parameters based on the event
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
     this.getFromServer();
@@ -90,8 +143,8 @@ export class MagicalObjectListComponent implements OnInit {
         this.pageIndex,
         this.pageSize,
         this.sort,
-        null,
-        null,
+        this.discoveredFrom,
+        this.discoveredTo,
         null,
       )
       .subscribe({
@@ -117,7 +170,6 @@ export class MagicalObjectListComponent implements OnInit {
   }
 
   sortData($event: Sort) {
-    console.log($event);
     if ($event.direction !== '') {
       const column =
         $event.active.charAt(0).toUpperCase() + $event.active.slice(1);
