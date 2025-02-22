@@ -1,7 +1,13 @@
 <div>
   <div>Magical objects</div>
 
-  <a color="primary" mat-raised-button routerLink="/magical-objects/create">Create</a>
+  <div class="actions">
+    <a color="primary" mat-raised-button routerLink="/magical-objects/create">Create</a>
+  </div>
+
+  <div class="filters">
+    <input (keyup)="onSearch()" [(ngModel)]="searchTerm" matInput placeholder="Search" type="text">
+  </div>
 
   @if (listResponse) {
     <table mat-table [dataSource]="listResponse.data">
@@ -37,5 +43,10 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
   }
 </div>

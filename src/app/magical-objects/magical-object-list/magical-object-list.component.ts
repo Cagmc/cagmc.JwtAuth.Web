@@ -18,6 +18,10 @@ import {
 import { DatePipe } from '@angular/common';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
+import { FormsModule } from '@angular/forms';
+import { debounce } from 'lodash';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-magical-object-list',
@@ -36,11 +40,15 @@ import { RouterLink } from '@angular/router';
     MatAnchor,
     RouterLink,
     MatButton,
+    MatPaginator,
+    FormsModule,
+    MatInput,
   ],
   templateUrl: './magical-object-list.component.html',
   styleUrl: './magical-object-list.component.scss',
 })
 export class MagicalObjectListComponent implements OnInit {
+  searchTerm: string | null = null;
   listResponse: MagicalObjectListResponse | undefined;
   displayedColumns: string[] = [
     'id',
@@ -49,11 +57,18 @@ export class MagicalObjectListComponent implements OnInit {
     'discovered',
     'actions',
   ];
+  onSearch = debounce(() => {
+    this.getFromServer();
+  }, 300);
 
   constructor(private readonly service: MagicalObjectService) {}
 
   ngOnInit(): void {
-    this.service.get(null, null, null, null).subscribe({
+    this.getFromServer();
+  }
+
+  getFromServer() {
+    this.service.get(this.searchTerm, null, null, null).subscribe({
       next: (response) => {
         this.listResponse = response as MagicalObjectListResponse;
       },
