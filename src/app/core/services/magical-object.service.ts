@@ -11,6 +11,8 @@ export class MagicalObjectService {
 
   public get(
     nameFilter: string | null,
+    pageIndex: number | null,
+    pageSize: number | null,
     discoveredFrom: Date | null,
     discoveredTo: Date | null,
     elementalFilterSet: ElementalType[] | null,
@@ -21,19 +23,14 @@ export class MagicalObjectService {
       queryFilter = `nameFilter=${nameFilter}`;
     }
 
-    if (discoveredFrom !== null) {
-      queryFilter =
-        queryFilter === null
-          ? `discoveredFrom=${discoveredFrom}`
-          : `${queryFilter}&discoveredFrom=${discoveredFrom}`;
-    }
-
-    if (discoveredTo !== null) {
-      queryFilter =
-        queryFilter === null
-          ? `discoveredTo=${discoveredTo}`
-          : `${queryFilter}&discoveredTo=${discoveredTo}`;
-    }
+    queryFilter = this.appendFilter(
+      queryFilter,
+      'discoveredFrom',
+      discoveredFrom,
+    );
+    queryFilter = this.appendFilter(queryFilter, 'discoveredTo', discoveredTo);
+    queryFilter = this.appendFilter(queryFilter, 'pageIndex', pageIndex);
+    queryFilter = this.appendFilter(queryFilter, 'pageSize', pageSize);
 
     let elementalQueryFilter: string | null = null;
 
@@ -62,6 +59,21 @@ export class MagicalObjectService {
 
   public delete(id: number) {
     return this.http.delete(`${this.baseUrl}/api/magical-objects/${id}`);
+  }
+
+  private appendFilter(
+    filter: string | null,
+    filterName: string,
+    value: string | number | Date | null,
+  ) {
+    if (value !== null) {
+      filter =
+        filter === null
+          ? `${filterName}=${value}`
+          : `${filter}&${filterName}=${value}`;
+    }
+
+    return filter;
   }
 }
 
