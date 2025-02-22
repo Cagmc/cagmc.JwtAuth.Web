@@ -22,6 +22,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
 import { debounce } from 'lodash';
 import { MatInput } from '@angular/material/input';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-magical-object-list',
@@ -43,6 +44,8 @@ import { MatInput } from '@angular/material/input';
     MatPaginator,
     FormsModule,
     MatInput,
+    MatSort,
+    MatSortHeader,
   ],
   templateUrl: './magical-object-list.component.html',
   styleUrl: './magical-object-list.component.scss',
@@ -51,6 +54,7 @@ export class MagicalObjectListComponent implements OnInit {
   searchTerm: string | null = null;
   pageIndex: number = 0;
   pageSize: number = 10;
+  sort: string | null = null;
   listResponse: MagicalObjectListResponse | undefined;
   displayedColumns: string[] = [
     'id',
@@ -81,7 +85,15 @@ export class MagicalObjectListComponent implements OnInit {
 
   getFromServer() {
     this.service
-      .get(this.searchTerm, this.pageIndex, this.pageSize, null, null, null)
+      .get(
+        this.searchTerm,
+        this.pageIndex,
+        this.pageSize,
+        this.sort,
+        null,
+        null,
+        null,
+      )
       .subscribe({
         next: (response) => {
           this.listResponse = response as MagicalObjectListResponse;
@@ -102,5 +114,17 @@ export class MagicalObjectListComponent implements OnInit {
         console.log('Delete magical object failed', error);
       },
     });
+  }
+
+  sortData($event: Sort) {
+    console.log($event);
+    if ($event.direction !== '') {
+      const column =
+        $event.active.charAt(0).toUpperCase() + $event.active.slice(1);
+      this.sort = `${column}<>${$event.direction}`;
+    } else {
+      this.sort = null;
+    }
+    this.getFromServer();
   }
 }

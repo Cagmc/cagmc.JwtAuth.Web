@@ -13,6 +13,7 @@ export class MagicalObjectService {
     nameFilter: string | null,
     pageIndex: number | null,
     pageSize: number | null,
+    sort: string | null,
     discoveredFrom: Date | null,
     discoveredTo: Date | null,
     elementalFilterSet: ElementalType[] | null,
@@ -31,6 +32,7 @@ export class MagicalObjectService {
     queryFilter = this.appendFilter(queryFilter, 'discoveredTo', discoveredTo);
     queryFilter = this.appendFilter(queryFilter, 'pageIndex', pageIndex);
     queryFilter = this.appendFilter(queryFilter, 'pageSize', pageSize);
+    queryFilter = this.appendFilter(queryFilter, 'sort', sort);
 
     let elementalQueryFilter: string | null = null;
 
