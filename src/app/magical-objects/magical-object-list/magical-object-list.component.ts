@@ -145,7 +145,7 @@ export class MagicalObjectListComponent implements OnInit {
       elementalFilterSet: null,
       sortByColumn: this.sortByColumn,
       isAscending: this.isAscending,
-      pageIndex: this.pageIndex,
+      pageIndex: this.pageIndex + 1,
       pageSize: this.pageSize,
     } as MagicalObjectListFilter;
 
