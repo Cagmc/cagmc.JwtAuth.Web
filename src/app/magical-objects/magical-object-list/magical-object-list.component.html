@@ -37,6 +37,15 @@
       </mat-datepicker>
     </mat-form-field>
 
+    <mat-form-field class="form-field">
+      <mat-label>Elemental</mat-label>
+      <mat-select [(ngModel)]="elementalFilterSet" multiple>
+        @for (type of elementalTypes; track type) {
+          <mat-option [value]="type">{{ type }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
     <button (click)="onSearch()" class="apply-filters-button" mat-flat-button>Search</button>
     <button (click)="onResetFilters()" class="reset-filters-button" mat-flat-button>Reset</button>
   </div>

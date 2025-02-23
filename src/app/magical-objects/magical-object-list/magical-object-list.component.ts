@@ -42,9 +42,12 @@ import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
+  MatOption,
 } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from '../../core/formats/date.formats';
+import { ElementalType } from '../../core/enums/elemental-type.enum';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-magical-object-list',
@@ -87,6 +90,8 @@ import { MY_FORMATS } from '../../core/formats/date.formats';
     MatHint,
     MatSuffix,
     ReactiveFormsModule,
+    MatSelect,
+    MatOption,
   ],
   templateUrl: './magical-object-list.component.html',
   styleUrl: './magical-object-list.component.scss',
@@ -99,9 +104,10 @@ export class MagicalObjectListComponent implements OnInit {
   isAscending: boolean = true;
   discoveredFrom: Date | null = null;
   discoveredTo: Date | null = null;
-  elemental: string | null = null;
+  elementalFilterSet: ElementalType[] | null = null;
 
   listResponse: MagicalObjectListResponse | undefined;
+  elementalTypes = Object.values(ElementalType);
   displayedColumns: string[] = [
     'id',
     'name',
@@ -126,8 +132,8 @@ export class MagicalObjectListComponent implements OnInit {
     this.searchTerm = null;
     this.discoveredFrom = null;
     this.discoveredTo = null;
-    this.elemental = null;
     this.pageIndex = 0;
+    this.elementalFilterSet = null;
     this.getFromServer();
   }
 
@@ -142,7 +148,7 @@ export class MagicalObjectListComponent implements OnInit {
       nameFilter: this.searchTerm,
       discoveredFrom: this.discoveredFrom,
       discoveredTo: this.discoveredTo,
-      elementalFilterSet: null,
+      elementalFilterSet: this.elementalFilterSet,
       sortByColumn: this.sortByColumn,
       isAscending: this.isAscending,
       pageIndex: this.pageIndex + 1,
