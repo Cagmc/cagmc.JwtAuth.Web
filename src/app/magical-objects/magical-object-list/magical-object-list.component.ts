@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+  MagicalObjectListFilter,
   MagicalObjectListResponse,
   MagicalObjectService,
 } from '../../core/services/magical-object.service';
@@ -94,7 +95,8 @@ export class MagicalObjectListComponent implements OnInit {
   searchTerm: string | null = null;
   pageIndex: number = 0;
   pageSize: number = 10;
-  sort: string | null = null;
+  sortByColumn: string = 'Name';
+  isAscending: boolean = true;
   discoveredFrom: Date | null = null;
   discoveredTo: Date | null = null;
   elemental: string | null = null;
@@ -109,17 +111,16 @@ export class MagicalObjectListComponent implements OnInit {
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  onSearch = debounce(() => {
+    this.pageIndex = 0;
+    this.getFromServer();
+  }, 300);
 
   constructor(private readonly service: MagicalObjectService) {}
 
   ngOnInit(): void {
     this.getFromServer();
   }
-
-  onSearch = debounce(() => {
-    this.pageIndex = 0;
-    this.getFromServer();
-  }, 300);
 
   onResetFilters() {
     this.searchTerm = null;
@@ -137,24 +138,25 @@ export class MagicalObjectListComponent implements OnInit {
   }
 
   getFromServer() {
-    this.service
-      .get(
-        this.searchTerm,
-        this.pageIndex,
-        this.pageSize,
-        this.sort,
-        this.discoveredFrom,
-        this.discoveredTo,
-        null,
-      )
-      .subscribe({
-        next: (response) => {
-          this.listResponse = response as MagicalObjectListResponse;
-        },
-        error: (error) => {
-          console.error('Error fetching magical object list:', error);
-        },
-      });
+    const filter = {
+      nameFilter: this.searchTerm,
+      discoveredFrom: this.discoveredFrom,
+      discoveredTo: this.discoveredTo,
+      elementalFilterSet: null,
+      sortByColumn: this.sortByColumn,
+      isAscending: this.isAscending,
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+    } as MagicalObjectListFilter;
+
+    this.service.get(filter).subscribe({
+      next: (response) => {
+        this.listResponse = response as MagicalObjectListResponse;
+      },
+      error: (error) => {
+        console.error('Error fetching magical object list:', error);
+      },
+    });
   }
 
   onDelete(id: number) {
@@ -171,11 +173,12 @@ export class MagicalObjectListComponent implements OnInit {
 
   sortData($event: Sort) {
     if ($event.direction !== '') {
-      const column =
+      this.sortByColumn =
         $event.active.charAt(0).toUpperCase() + $event.active.slice(1);
-      this.sort = `${column}<>${$event.direction}`;
+      this.isAscending = $event.direction === 'asc';
     } else {
-      this.sort = null;
+      this.sortByColumn = 'Name';
+      this.isAscending = true;
     }
     this.getFromServer();
   }

@@ -42,7 +42,7 @@
   </div>
 
   @if (listResponse) {
-    <table mat-table matSort matSortActive="name" matSortDirection="asc" [dataSource]="listResponse.data"
+    <table mat-table matSort matSortActive="name" matSortDirection="asc" [dataSource]="listResponse.items"
            (matSortChange)="sortData($event)">
       <ng-container matColumnDef="id">
         <th mat-header-cell mat-sort-header sortActionDescription="Sort by Id" *matHeaderCellDef> Id</th>

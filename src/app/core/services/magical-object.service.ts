@@ -9,35 +9,45 @@ export class MagicalObjectService {
 
   constructor(private readonly http: HttpClient) {}
 
-  public get(
-    nameFilter: string | null,
-    pageIndex: number | null,
-    pageSize: number | null,
-    sort: string | null,
-    discoveredFrom: Date | null,
-    discoveredTo: Date | null,
-    elementalFilterSet: ElementalType[] | null,
-  ) {
+  public get(filter: MagicalObjectListFilter) {
     let queryFilter: string | null = null;
 
-    if (nameFilter !== null && nameFilter.length > 0) {
-      queryFilter = `nameFilter=${nameFilter}`;
+    if (filter.nameFilter !== null && filter.nameFilter.length > 0) {
+      queryFilter = `nameFilter=${filter.nameFilter}`;
     }
 
     queryFilter = this.appendFilter(
       queryFilter,
       'discoveredFrom',
-      discoveredFrom,
+      filter.discoveredFrom,
     );
-    queryFilter = this.appendFilter(queryFilter, 'discoveredTo', discoveredTo);
-    queryFilter = this.appendFilter(queryFilter, 'pageIndex', pageIndex);
-    queryFilter = this.appendFilter(queryFilter, 'pageSize', pageSize);
-    queryFilter = this.appendFilter(queryFilter, 'sort', sort);
+    queryFilter = this.appendFilter(
+      queryFilter,
+      'discoveredTo',
+      filter.discoveredTo,
+    );
+    queryFilter = this.appendFilter(queryFilter, 'pageIndex', filter.pageIndex);
+    queryFilter = this.appendFilter(queryFilter, 'pageSize', filter.pageSize);
+    queryFilter = this.appendFilter(
+      queryFilter,
+      'sortByColumn',
+      filter.sortByColumn,
+    );
+    queryFilter = this.appendFilter(
+      queryFilter,
+      'isAscending',
+      filter.isAscending,
+    );
 
     let elementalQueryFilter: string | null = null;
 
-    if (elementalFilterSet !== null && elementalFilterSet.length > 0) {
-      elementalQueryFilter = elementalFilterSet.join('&elementalFilterSet=');
+    if (
+      filter.elementalFilterSet !== null &&
+      filter.elementalFilterSet.length > 0
+    ) {
+      elementalQueryFilter = filter.elementalFilterSet.join(
+        '&elementalFilterSet=',
+      );
       queryFilter =
         queryFilter === null
           ? `elementalFilterSet=${elementalQueryFilter}`
@@ -66,7 +76,7 @@ export class MagicalObjectService {
   private appendFilter(
     filter: string | null,
     filterName: string,
-    value: string | number | Date | null,
+    value: string | number | Date | boolean | null,
   ) {
     if (value !== null) {
       filter =
@@ -79,8 +89,19 @@ export class MagicalObjectService {
   }
 }
 
+export interface MagicalObjectListFilter {
+  nameFilter: string | null;
+  discoveredFrom: Date | null;
+  discoveredTo: Date | null;
+  elementalFilterSet: ElementalType[] | null;
+  pageIndex: number | null;
+  pageSize: number | null;
+  sortByColumn: string;
+  isAscending: boolean;
+}
+
 export interface MagicalObjectListResponse {
-  data: MagicalObjectItemViewModel[];
+  items: MagicalObjectItemViewModel[];
   total: number;
 }
 
