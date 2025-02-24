@@ -24,7 +24,6 @@ export class NavHeaderComponent implements OnInit {
   onLogout() {
     this.authService.logout();
     this.isAuthenticated = false;
-    this.router.navigate(['/']);
-    window.location.reload();
+    this.router.navigate(['/']).then(() => window.location.reload());
   }
 }
