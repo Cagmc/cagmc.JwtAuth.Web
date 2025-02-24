@@ -107,7 +107,6 @@ export class CreateMagicalObjectComponent {
   displayedPropertyColumns: string[] = ['name', 'value', 'actions'];
   addedProperties: CreateMagicalPropertyRequest[] = [];
   elementalTypes = Object.values(ElementalType);
-  protected readonly ElementalType = ElementalType;
   protected readonly Object = Object;
 
   constructor(
