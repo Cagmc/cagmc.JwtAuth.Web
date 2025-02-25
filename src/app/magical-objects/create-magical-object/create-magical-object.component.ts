@@ -3,6 +3,7 @@ import {
   CreateMagicalObjectRequest,
   CreateMagicalPropertyRequest,
   MagicalObjectService,
+  MockMagicalObjectService,
 } from '../../core/services/magical-object.service';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import {
@@ -50,6 +51,7 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-create-magical-object',
@@ -60,6 +62,12 @@ import {
       deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    {
+      provide: MagicalObjectService,
+      useClass: environment.useMockApi
+        ? MockMagicalObjectService
+        : MagicalObjectService,
+    },
   ],
   imports: [
     MatInputModule,

@@ -3,6 +3,7 @@ import {
   MagicalObjectListFilter,
   MagicalObjectListResponse,
   MagicalObjectService,
+  MockMagicalObjectService,
 } from '../../core/services/magical-object.service';
 import {
   MatCell,
@@ -48,6 +49,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from '../../core/formats/date.formats';
 import { ElementalType } from '../../core/enums/elemental-type.enum';
 import { MatSelect } from '@angular/material/select';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-magical-object-list',
@@ -58,6 +60,12 @@ import { MatSelect } from '@angular/material/select';
       deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    {
+      provide: MagicalObjectService,
+      useClass: environment.useMockApi
+        ? MockMagicalObjectService
+        : MagicalObjectService,
+    },
   ],
   imports: [
     MatTable,
@@ -157,7 +165,7 @@ export class MagicalObjectListComponent implements OnInit {
 
     this.service.get(filter).subscribe({
       next: (response) => {
-        this.listResponse = response as MagicalObjectListResponse;
+        this.listResponse = response;
       },
       error: (error) => {
         console.error('Error fetching magical object list:', error);
