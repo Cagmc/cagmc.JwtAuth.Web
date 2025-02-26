@@ -9,14 +9,24 @@ import {
 } from '@angular/forms';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AccountService } from '../core/services/account.service';
+import {
+  AccountService,
+  MockAccountService,
+} from '../core/services/account.service';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthenticationMode } from '../core/enums/authentication-mode.enum';
 import { MatOption, MatSelect } from '@angular/material/select';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
+  providers: [
+    {
+      provide: AccountService,
+      useClass: environment.useMockApi ? MockAccountService : AccountService,
+    },
+  ],
   imports: [
     MatButton,
     ReactiveFormsModule,

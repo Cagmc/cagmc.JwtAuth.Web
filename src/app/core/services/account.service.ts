@@ -5,8 +5,50 @@ import { Observable, tap } from 'rxjs';
 import { AuthenticationMode } from '../enums/authentication-mode.enum';
 import { AuthService } from '../auth/auth.service';
 
+export interface IAccountService {
+  login(
+    email: string,
+    password: string,
+    authenticationMode: AuthenticationMode,
+  ): Observable<LoginResponse>;
+
+  me(): Observable<MeViewModel>;
+}
+
 @Injectable({ providedIn: 'root' })
-export class AccountService {
+export class MockAccountService implements IAccountService {
+  constructor(private readonly authService: AuthService) {}
+
+  public login(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    email: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    password: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    authenticationMode: AuthenticationMode,
+  ): Observable<LoginResponse> {
+    const token = 'mock.token';
+    this.authService.login(token);
+
+    return new Observable<LoginResponse>((observer) =>
+      observer.next({
+        token: token,
+      } as LoginResponse),
+    );
+  }
+
+  public me(): Observable<MeViewModel> {
+    return new Observable<MeViewModel>((observer) =>
+      observer.next({
+        username: 'mock.user@cagmc.com',
+        role: 'Test',
+      } as MeViewModel),
+    );
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class AccountService implements IAccountService {
   private readonly baseUrl = environment.apiUrl;
 
   constructor(
@@ -18,7 +60,7 @@ export class AccountService {
     email: string,
     password: string,
     authenticationMode: AuthenticationMode,
-  ): Observable<object> {
+  ): Observable<LoginResponse> {
     const loginModel = {
       username: email,
       password: password,
@@ -27,17 +69,16 @@ export class AccountService {
     } as LoginModel;
 
     return this.http
-      .post(`${this.baseUrl}/api/accounts/login`, loginModel)
+      .post<LoginResponse>(`${this.baseUrl}/api/accounts/login`, loginModel)
       .pipe(
         tap((response) => {
-          const loginResponse = response as LoginResponse;
-          this.authService.login(loginResponse.token);
+          this.authService.login(response.token);
         }),
       );
   }
 
-  public me(): Observable<object> {
-    return this.http.get(`${this.baseUrl}/api/accounts/me`);
+  public me(): Observable<MeViewModel> {
+    return this.http.get<MeViewModel>(`${this.baseUrl}/api/accounts/me`);
   }
 }
 
