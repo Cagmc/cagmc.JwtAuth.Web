@@ -18,29 +18,82 @@ export interface IMagicalObjectService {
 
 @Injectable({ providedIn: 'root' })
 export class MockMagicalObjectService implements IMagicalObjectService {
+  entities: MagicalObject[] = [
+    {
+      id: 1,
+      name: 'Sword of Fire',
+      description: 'This is a sword of fire.',
+      elemental: ElementalType.Fire,
+      discovered: new Date(),
+      properties: [
+        {
+          name: 'Flame Duration',
+          value: '20 seconds',
+        },
+        {
+          name: 'Damage',
+          value: '100',
+        },
+      ],
+    },
+  ];
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   get(filter: MagicalObjectListFilter): Observable<MagicalObjectListResponse> {
-    throw new Error('Method not implemented.');
+    return new Observable<MagicalObjectListResponse>((observer) => {
+      observer.next({
+        items: this.entities.map((e) => ({
+          id: e.id,
+          name: e.name,
+          elemental: e.elemental,
+          discovered: e.discovered,
+        })),
+        total: this.entities.length,
+      } as MagicalObjectListResponse);
+    });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getById(id: number): Observable<MagicalObjectViewModel> {
-    throw new Error('Method not implemented.');
+    const entity = this.entities.find((e) => e.id === id);
+
+    if (entity === undefined) {
+      throw new Error(`Entity with id ${id} not found.`);
+    }
+
+    return new Observable<MagicalObjectViewModel>((observer) =>
+      observer.next(entity as MagicalObjectViewModel),
+    );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(request: CreateMagicalObjectRequest): Observable<object> {
-    throw new Error('Method not implemented.');
+    const entity = request as MagicalObject;
+    entity.id = Math.max(0, ...this.entities.map((e) => e.id)) + 1;
+
+    this.entities.push(entity);
+
+    return new Observable<object>((observer) => observer.next({}));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, request: UpdateMagicalObjectRequest): Observable<object> {
-    throw new Error('Method not implemented.');
+    const entity = this.entities.find((e) => e.id === id);
+
+    if (entity === undefined) {
+      throw new Error(`Entity with id ${id} not found.`);
+    }
+
+    entity.name = request.name;
+    entity.description = request.description;
+    entity.elemental = request.elemental;
+    entity.discovered = request.discovered;
+    entity.properties = request.properties;
+
+    return new Observable<object>((observer) => observer.next({}));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   delete(id: number): Observable<object> {
-    throw new Error('Method not implemented.');
+    this.entities = this.entities.filter((e) => e.id !== id);
+
+    return new Observable<object>((observer) => observer.next({}));
   }
 }
 
@@ -134,6 +187,21 @@ export class MagicalObjectService implements IMagicalObjectService {
 
     return filter;
   }
+}
+
+interface MagicalObject {
+  id: number;
+  name: string;
+  description: string | null;
+  elemental: ElementalType;
+  discovered: Date;
+
+  properties: MagicalObjectProperty[];
+}
+
+interface MagicalObjectProperty {
+  name: string;
+  value: string;
 }
 
 export interface MagicalObjectListFilter {
