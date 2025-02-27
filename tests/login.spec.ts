@@ -1,29 +1,12 @@
 import { expect, test } from '@playwright/test';
+import { login } from './login.helper';
 
 test('login', async ({ page }) => {
-  await page.goto('/login');
-
-  await expect(page).toHaveURL('/login');
-
-  // Set email
-  await page.fill('input[type=text]', 'admin@cagmc.com');
-  await page.fill('input[type=password]', '<PASSWORD>');
-
-  // Submit
-  await page.click('button[type=submit]');
-
-  await expect(page).toHaveURL('/home');
+  await login(page);
 });
 
 test('logout', async ({ page }) => {
-  await page.goto('/login');
-
-  // Set email
-  await page.fill('input[type=text]', 'admin@cagmc.com');
-  await page.fill('input[type=password]', '<PASSWORD>');
-
-  // Submit
-  await page.click('button[type=submit]');
+  await login(page);
 
   await page.click('a:has-text("Logout")');
 
